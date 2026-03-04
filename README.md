@@ -2,88 +2,118 @@
 
 Follow the steps below to deploy the **Admin Panel – Company & Employee Management** project.
 
-## 1. Clone the Repository
+
+# 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
-cd <project-folder>
-```
+git clone https://github.com/sgopi-dev/AdminPanel.git
+cd AdminPanel
+````
 
-## 2. Install Dependencies
+# 2. Install Backend Dependencies
 
-Make sure **PHP, Composer, and MySQL** are installed.
+Make sure **PHP, Composer, and Node.js** are installed.
 
 ```bash
 composer install
 ```
 
-## 3. Environment Configuration
+# 3. Environment Configuration
 
-Copy the environment file.
+Copy the environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-Update the `.env` file with your database credentials.
+Update the `.env` file.
 
-Example:
+Example configuration:
 
 ```env
-APP_NAME=Laravel
+APP_NAME=AdminPanel
 APP_ENV=local
-APP_KEY= KEY
+APP_KEY=
 APP_DEBUG=true
 APP_URL=http://localhost
 
 DB_CONNECTION=sqlite
-# DB_HOST=127.0.0.1
-# DB_PORT=3306
-# DB_DATABASE=admin_panel
-# DB_USERNAME=root
-# DB_PASSWORD=your_password
 ```
 
-## 4. Generate Application Key
+# 4. Generate Application Key
 
 ```bash
 php artisan key:generate
 ```
-## 5. Run Migrations
 
-Create the required database tables.
+# 5. Database Setup (SQLite)
+
+This project uses **SQLite** for simplicity.
+
+Create the SQLite database file inside the **database folder**.
+
+### Linux / Mac
+
+```bash
+touch database/database.sqlite
+```
+
+### Windows (PowerShell)
+
+```powershell
+New-Item database/database.sqlite
+```
+
+# 6. Install Frontend Dependencies
+
+Install Node modules and build assets.
+
+```bash
+npm install
+npm run build
+```
+
+# 7. Create Storage Link
+
+This allows uploaded images (company logos) to be accessible from the browser.
+
+```bash
+php artisan storage:link
+```
+
+# 8. Run Migrations
+
+Create the database tables.
 
 ```bash
 php artisan migrate
 ```
 
-## 6. Seed the Database
+# 9. Seed the Database
 
-Seed the database with the admin user and employee records.
+Seed the database with admin user and employee data.
 
 ```bash
 php artisan db:seed
 ```
 
-This will create:
+This will create the **Admin User**.
 
-**Admin User**
-
-Email:
+Email
 
 ```
 admin@example.com
 ```
 
-Password:
+Password
 
 ```
 Monopoly@3455
 ```
 
-## 8. Start the Application
+# 10. Start the Application
 
-For local deployment:
+Run the development server.
 
 ```bash
 php artisan serve
@@ -95,11 +125,20 @@ Application will run at:
 http://127.0.0.1:8000
 ```
 
-## Production Deployment Notes
+# Production Deployment Notes
 
-For production servers:
+For production environments:
 
+* Set `APP_ENV=production`
 * Set `APP_DEBUG=false`
+* Run:
+
+```bash
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+```
+
 * Use **Apache or Nginx**
-* Point the server root to the **public/** directory
-* Configure **SSL (HTTPS)** for secure access
+* Set the web root to the **public/** directory
+* Enable **HTTPS (SSL)** for secure access

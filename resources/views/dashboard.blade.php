@@ -33,6 +33,12 @@
     <!-- Company Table -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 mt-20">
 
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
+
         <div class="px-6 py-6 border-b border-gray-100 text-center">
             <h2 class="text-3xl font-bold text-gray-800">
                 Companies List
