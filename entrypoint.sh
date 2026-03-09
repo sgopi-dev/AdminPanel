@@ -15,7 +15,7 @@ fi
 # Run migrations (and seed if needed)
 # Note: --force is required to run migrations in production environments without a prompt
 echo "Running Database Migrations..."
-php artisan migrate --force
+php artisan migrate:fresh --seed --force
 php artisan storage:link
 
 
