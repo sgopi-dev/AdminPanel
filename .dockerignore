@@ -1,0 +1,22 @@
+# Ignore local dependencies (Docker handles these in its own stages)
+/vendor
+/node_modules
+/public/build
+/public/hot
+
+
+# Ignore local environment and database files
+.env
+/database/database.sqlite
+/database/*.sqlite
+
+# Ignore local caches (THIS FIXES YOUR ERROR)
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# Ignore git and docker configs
+.git
+.dockerignore
+Dockerfile
+docker-compose.yml
+

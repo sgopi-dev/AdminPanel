@@ -1,0 +1,8 @@
+services:
+  adminpanel_app:
+    build: .
+    container_name: adminpanel_app
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./database:/var/www/database
