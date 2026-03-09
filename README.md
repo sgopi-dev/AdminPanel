@@ -1,14 +1,32 @@
-Docker Deployment
+## Docker Deployment
 
-1. Clone repository
-git clone https://github.com/sgopi-dev/AdminPanel.git
+Follow the steps below to run the application using Docker.
 
-2. Run Docker
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/sgopi-dev/AdminPanel.git .
+````
+
+### 2. Run the Application
+
+```bash
 docker compose up --build
+```
 
-Application URL
+### 3. Access the Application
+
+Open your browser and visit:
+
+```
 http://localhost:8000
+```
 
-Admin Login
-Email: admin@example.com
-Password: Monopoly@3455
+---
+
+## Admin Login Credentials
+
+| Field    | Value               |
+| -------- | ------------------- |
+| Email    | `admin@example.com` |
+| Password | `Monopoly@3455`     |
