@@ -6,16 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
+    protected $table;
+
+    public function __construct()
+    {
+        $this->table = config('tables.companies');
+    }
+
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create($this->table, function (Blueprint $table) {
             $table->id();
             $table->string('name')->unique();
-            $table->string('email')->nullable();
-            $table->string('website')->nullable();
+            $table->string('email')->unique()->nullable();
+            $table->string('website')->unique()->nullable();
             $table->string('logo')->nullable();
             $table->softDeletes();
             $table->timestamps();
@@ -27,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists($this->table);
     }
 };

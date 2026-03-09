@@ -2,6 +2,19 @@
 
 @section('content')
 <div class="container">
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ route('dashboard') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                Employees
+            </li>
+        </ol>
+    </nav>
+
     <h2>Employees</h2>
 
     <form method="GET" class="card p-3 mb-4 shadow-sm">
@@ -69,7 +82,7 @@
         <thead>
             <tr>
                 <th width="70">Photo</th>
-                <th>Name</th>
+             sc   <th>Name</th>
                 <th>Company</th>
                 <th>Email</th>
                 <th>Status</th>

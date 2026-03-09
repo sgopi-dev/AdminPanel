@@ -4,6 +4,18 @@
 
 <div class="container">
 
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ route('dashboard') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                Companies
+            </li>
+        </ol>
+    </nav>
+
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
         <h2>Companies</h2>
 
@@ -31,13 +43,10 @@
             <tr>
                 <th>Logo</th>
                 <th>Name</th>
-                <th>Email</th>
-                <th>Website</th>
                 <th>Employees</th>
                 <th width="160">Action</th>
             </tr>
         </thead>
-
 
         <tbody>
 
@@ -76,46 +85,21 @@
 
                 </td>
 
-
                 <!-- Name -->
                 <td>{{ $company->name }}</td>
-
-
-                <!-- Email -->
-                <td>{{ $company->email }}</td>
-
-
-                <!-- Website -->
-                <td>
-
-                    @if($company->website)
-
-                    <a href="{{ $company->website }}" target="_blank">
-                        {{ $company->website }}
-                    </a>
-
-                    @else
-                    -
-                    @endif
-
-                </td>
-
 
                 <!-- Employees -->
                 <td>
                     {{ $company->employees->count() }}
                 </td>
 
-
                 <!-- Actions -->
                 <td>
 
-                    <a href="{{ route('companies.edit', $company->id) }}"
+                    <a href="{{ route('companies.show', $company->id) }}"
                         class="btn btn-sm btn-warning">
-
-                        Edit
+                        View
                     </a>
-
 
                     <form action="{{ route('companies.destroy', $company->id) }}"
                         method="POST"
@@ -126,9 +110,7 @@
 
                         <button class="btn btn-sm btn-danger"
                             onclick="return confirm('Delete this company?')">
-
                             Delete
-
                         </button>
 
                     </form>

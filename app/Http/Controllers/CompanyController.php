@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CompanyController extends Controller
 {
@@ -31,35 +32,55 @@ class CompanyController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|unique:companies',
-            'email'=> 'nullable|email',
-            'website'=>'nullable|url',
-            'logo'=> 'nullable|image|mimes:png,jpg,jpeg|max:2048',
+            'name' => 'required|string|max:255|unique:companies,name',
+            'email' => 'nullable|email|unique:companies,email',
+            'website' => 'nullable|url|unique:companies,website',
+            'logo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048',
         ]);
 
-        $logoPath = null;
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'website' => $request->website,
+        ];
 
         if ($request->hasFile('logo')) {
-            $logoPath = $request->file('logo')->store('logos','public');
+            $data['logo'] = $request->file('logo')->store('logos', 'public');
         }
 
-        Company::create([
-            'name'=> $request->name,
-            'email' => $request->email,
-            'website'=>$request->website,
-            'logo'=> $logoPath,
-        ]);
-        
-        return redirect()->route('companies.index')
-                        ->with('success','Company created successfully');
-    }
+        Company::create($data);
 
+        return redirect()->route('companies.index')
+            ->with('success', 'Company created successfully');
+    }
     /**
      * Display the specified resource.
      */
-    public function show(Company $company)
+    public function show(Company $company, Request $request)
     {
-        $employees = $company->employees;
+        // Start query for employees of this company
+        $query = $company->employees();
+
+        // Search by name/email/full name
+        if ($search = trim($request->input('search'))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhereRaw("CONCAT(first_name,' ',last_name) LIKE ?", ["%{$search}%"])
+                    ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('is_active', $request->status);
+        }
+
+        // Paginate employees
+        $employees = $query->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString(); // preserves search & filter in pagination links
+
         return view('companies.show', compact('company', 'employees'));
     }
 
@@ -76,22 +97,41 @@ class CompanyController extends Controller
      */
     public function update(Request $request, Company $company)
     {
-        $data = $request->validate([
-            'name' => 'required|unique:companies,name,'.$company->id,
-            'email'=> 'nullable|email',
-            'website'=> 'nullable',
+        $request->validate([
+            'name' => [
+                'required',
+                Rule::unique('companies')->ignore($company->id)
+            ],
+
+            'email' => [
+                'nullable',
+                'email',
+                Rule::unique('companies', 'email')->ignore($company->id)
+            ],
+
+            'website' => [
+                'nullable',
+                'url',
+                Rule::unique('companies', 'website')->ignore($company->id)
+            ],
+
             'logo' => 'nullable|image|mimes:png,jpg,jpeg|max:2048'
         ]);
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'website' => $request->website,
+        ];
 
         if ($request->hasFile('logo')) {
             $data['logo'] = $request->file('logo')->store('logos', 'public');
         }
 
-        
         $company->update($data);
 
         return redirect()->route('companies.index')
-                        ->with('success','Company updated successfully');
+            ->with('success', 'Company updated successfully');
     }
 
     /**
@@ -99,11 +139,11 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
-        if($company->employees()->count() > 0){
-            return redirect()->back()->with('error','Cannot delete company with employeess');
+        if ($company->employees()->count() > 0) {
+            return redirect()->back()->with('error', 'Cannot delete company with employeess');
         }
 
         $company->delete();
-        return redirect()->route('companies.index')->with('success','Company deleted');
+        return redirect()->route('companies.index')->with('success', 'Company deleted');
     }
 }

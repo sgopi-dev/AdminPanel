@@ -4,6 +4,21 @@
 
 <div class="container mt-4">
 
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ route('dashboard') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('companies.index') }}">Companies</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                Edit Company
+            </li>
+        </ol>
+    </nav>
+
     <h2>Edit Company</h2>
 
     @if ($errors->any())

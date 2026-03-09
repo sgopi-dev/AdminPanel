@@ -6,16 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+
+    protected $table;
+
+    public function __construct()
+    {
+        $this->table = config('tables.employees');
+    }
+
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('employees', function (Blueprint $table) {
+        Schema::create($this->table, function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->foreignId('company_id')->constrained()->cascadeOnUpdate();
+            $table->foreignId('company_id')->constrained(config('tables.companies'))->restrictOnDelete();
             $table->string('email')->unique()->nullable();
             $table->string('phone')->nullable();
             $table->boolean('is_active')->default(true);
@@ -30,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employees');
+        Schema::dropIfExists($this->table);
     }
 };

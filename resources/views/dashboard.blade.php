@@ -52,8 +52,6 @@
                     <tr>
                         <th>Logo</th>
                         <th>Company Name</th>
-                        <th>Email</th>
-                        <th>Website</th>
                         <th>Employees</th>
                         <th width="160">Action</th>
                     </tr>
@@ -101,27 +99,6 @@
                         <!-- Name -->
                         <td>{{ $company->name }}</td>
 
-
-                        <!-- Email -->
-                        <td>{{ $company->email }}</td>
-
-
-                        <!-- Website -->
-                        <td>
-
-                            @if($company->website)
-
-                            <a href="{{ $company->website }}" target="_blank">
-                                {{ $company->website }}
-                            </a>
-
-                            @else
-                            -
-                            @endif
-
-                        </td>
-
-
                         <!-- Employees -->
                         <td>
                             {{ $company->employees->count() }}
@@ -131,10 +108,10 @@
                         <!-- Actions -->
                         <td>
 
-                            <a href="{{ route('companies.edit', $company->id) }}"
-                                class="btn btn-sm btn-warning">
+                            <a href="{{ route('companies.show', $company->id) }}"
+                                class="btn btn-sm btn-info">
 
-                                Edit
+                                View
                             </a>
 
 

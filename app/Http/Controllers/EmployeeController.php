@@ -12,33 +12,41 @@ class EmployeeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        // Start query with company relation
         $query = Employee::with('company');
 
-        if (request('name')) {
-
-            $name = request('name');
-
-            $query->where(function ($q) use ($name) {
-
-                $q->where('first_name', 'like', "%$name%")
-                    ->orWhere('last_name', 'like', "%$name%")
-                    ->orWhereRaw("CONCAT(first_name,' ',last_name) LIKE ?", ["%$name%"]);
+        // SEARCH by name (first, last, full) or email
+        if ($search = trim($request->input('search'))) {
+            $query->where(function ($q) use ($search) {
+                $q->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('last_name', 'like', "%{$search}%")
+                    ->orWhereRaw("CONCAT(first_name, ' ', last_name) LIKE ?", ["%{$search}%"])
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
-        if (request('company')) {
-            $query->where('company_id', request('company'));
+        // FILTER by company
+        if ($companyId = $request->input('company')) {
+            $query->where('company_id', $companyId);
         }
 
-        if (request('status') !== null && request('status') !== '') {
-            $query->where('is_active', request('status'));
+        // FILTER by status (active/inactive)
+        if ($request->filled('status')) {
+            $query->where('is_active', $request->status);
         }
 
+        // ORDER by latest
+        $query->orderBy('created_at', 'desc');
+
+        // PAGINATION (with query string to preserve filters)
         $employees = $query->paginate(10)->withQueryString();
+
+        // All companies for filter dropdown
         $companies = Company::all();
 
+        // Return to view
         return view('employees.index', compact('employees', 'companies'));
     }
 

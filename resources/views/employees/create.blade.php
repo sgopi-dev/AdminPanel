@@ -4,6 +4,21 @@
 
 <div class="container mt-4">
 
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="{{ route('dashboard') }}">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="{{ route('employees.index') }}">Employees</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">
+                Create Employee
+            </li>
+        </ol>
+    </nav>
+
     <h2>Create Employee</h2>
 
     @if ($errors->any())
@@ -26,19 +41,14 @@
         </div>
 
         <div class="mb-3">
-
-            <img id="preview"
-                style="max-width:300px;display:none">
-
+            <img id="preview" style="max-width:300px;display:none">
         </div>
 
         <button type="button"
             class="btn btn-primary mt-2"
             id="cropBtn"
             style="display:none">
-
             Crop Image
-
         </button>
 
         <div class="mb-3">
@@ -58,11 +68,9 @@
                 <option value="">Select Company</option>
 
                 @foreach($companies as $company)
-
                 <option value="{{ $company->id }}">
                     {{ $company->name }}
                 </option>
-
                 @endforeach
 
             </select>
@@ -81,10 +89,8 @@
         <div class="mb-3">
             <label>Status</label>
             <select name="is_active" class="form-control">
-
                 <option value="1">Active</option>
                 <option value="0">Inactive</option>
-
             </select>
         </div>
 
