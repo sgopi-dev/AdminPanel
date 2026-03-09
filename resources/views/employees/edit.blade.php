@@ -96,6 +96,8 @@
 
         <button class="btn btn-primary">Update Employee</button>
 
+        <button class="btn btn-secondary" onclick="history.back()">Back</button>
+
     </form>
 
 </div>

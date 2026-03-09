@@ -78,6 +78,9 @@
                 <a href="{{ route('companies.index') }}" class="btn btn-secondary">
                     Back
                 </a>
+                <a href="{{ route('employees.create') }}" class="btn btn-primary">
+                    Add Employee
+                </a>
             </div>
         </div>
     </div>
@@ -116,6 +119,7 @@
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Status</th>
+                        <th>Actions</th> <!-- New column -->
                     </tr>
                 </thead>
                 <tbody>
@@ -130,6 +134,21 @@
                             @else
                             <span class="badge bg-danger">Inactive</span>
                             @endif
+                        </td>
+                        <td>
+                            <!-- Edit Button -->
+                            <a href="{{ route('employees.edit', $employee->id) }}" class="btn btn-sm btn-primary">
+                                Edit
+                            </a>
+
+                            <!-- Delete Button -->
+                            <form action="{{ route('employees.destroy', $employee->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this employee?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-danger">
+                                    Delete
+                                </button>
+                            </form>
                         </td>
                     </tr>
                     @endforeach
